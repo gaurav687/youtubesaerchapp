@@ -3,6 +3,7 @@ import { SafeResourceUrl, DomSanitizer } from "@angular/platform-browser";
 import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
+import { Video } from 'src/app/shared/models/search.interface';
 @Component({
   selector: 'app-video-list',
   templateUrl: './video-list.component.html',
@@ -24,12 +25,13 @@ export class VideoListComponent implements OnInit {
     private http: HttpClient) { }
 
   ngOnInit(): void {
-    
+   
     this.results$ = this.http.get(
       "https://www.googleapis.com/youtube/v3/search?part=snippet&q=robocop&topicId=%2Fm%2F02vxn&key=AIzaSyBBjrR0beUW1vVg6p8YsCj6AtRF4i7UACY&part=snippet&type=video&maxResults=10"
     ).pipe(
-      map(res => res.items),
+      map((res: Video) => res.items),
       map((items: Array<any>) => {
+       
         return items.map(item => ({
           title: item.snippet.title,
           vidoeUrl: `https://www.youtube.com/embed/${item.id.videoId}`,
